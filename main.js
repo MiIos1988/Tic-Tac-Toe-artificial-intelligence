@@ -1,53 +1,2830 @@
-const container = document.querySelector(".container");
-let figure = "X"
-let lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 2],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 8],
-]
+let game = document.querySelector(".game");
+let text1 = document.getElementById("text1");
+let text2 = document.getElementById("text2");
+let btn = document.getElementById("btn");
+let playerX = true;
+let matrix = [
+  [0, 0, 0],
+  [0, 0, 0],
+  [0, 0, 0],
+];
 
-makeGrid();
+btn.addEventListener("click", () => {
+  matrix[0][0] = 0;
+  matrix[0][1] = 0;
+  matrix[0][2] = 0;
+  matrix[1][0] = 0;
+  matrix[1][1] = 0;
+  matrix[1][2] = 0;
+  matrix[2][0] = 0;
+  matrix[2][1] = 0;
+  matrix[2][2] = 0;
+  playerX = true;
+  render();
+  text1.innerText = "";
+});
 
-let boxes = document.querySelectorAll(".box");
-console.log(boxes)
-
-boxes.forEach(box => box.addEventListener("click", fillField))
-
-function fillField() {
-    this.innerText = figure;
-    figure === "X" ? figure = "O" : figure = "X"
-    checkResult()
-}
-
-function checkResult() {
-    lines.forEach(line => {
-        box1 = boxes[line[0]]
-        box2 = boxes[line[1]]
-        box3 = boxes[line[2]]
-
-        if (box1.innerText === box2.innerText && box1.innerText === box3.innerText && box1.innerText !== "") {
-            box1.style.background = "tomato"
-            box2.style.background = "tomato"
-            box3.style.background = "tomato"
-            stopGame()
-        }
-    })
-
-}
-
-function stopGame() {
-    boxes.forEach(box => box.removeEventListener("click", fillField))
-}
-
-function makeGrid() {
-    let text = ``;
-    for (let i = 0; i < 9; i++) {
-        text += `<div class="box"></div>`
+function render() {
+  game.innerHTML = "";
+  for (let i = 0; i < 3; i++) {
+    let row = document.createElement("div");
+    game.appendChild(row);
+    for (let j = 0; j < 3; j++) {
+      let field = document.createElement("div");
+      field.classList.add("row");
+      row.appendChild(field);
+      let text = "";
+      if (matrix[i][j] === 1) {
+        text = "X";
+      }
+      if (matrix[i][j] === 2) text = "O";
+      field.innerText = text;
+      if (playerX === true) {
+        field.addEventListener("click", () => valueEntries(i, j));
+      } else {
+        field.addEventListener("click", () => stop());
+      }
     }
-    container.innerHTML = text;
+  }
 }
+function end() {
+  playerX = false;
+}
+function valueEntries(i, j) {
+  if (matrix[i][j] === 0) {
+    matrix[i][j] = 1;
+    console.log(matrix[i][j]);
+  }
+  playerX = false;
+  setTimeout(valueMatrix, 500);
+
+  render();
+}
+function stop() {}
+
+function valueMatrix() {
+  playerX = true;
+  //kombinacija 1
+  if (
+    matrix[0][0] === 1 ||
+    matrix[0][2] === 1 ||
+    matrix[2][0] === 1 ||
+    matrix[2][2] === 1 ||
+    matrix[0][1] === 1 ||
+    matrix[1][0] === 1 ||
+    matrix[1][2] === 1 ||
+    matrix[2][1] === 1
+  ) {
+    if (matrix[1][1] === 0) matrix[1][1] = 2;
+  }
+  if (matrix[1][1] === 1) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 0 &&
+      matrix[0][1] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  //kombinacija 2
+  if (
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  //kombinacija 3
+  if (
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][2] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][1] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  //kombinacija 4
+  if (
+    matrix[0][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[0][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  //kombinacija 5
+  if (
+    matrix[0][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[0][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[0][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[1][0] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  // kombinacija 6
+  if (
+    matrix[2][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[0][0] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  // kombinacija 7
+  if (
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  //kombinacija 8
+  if (
+    matrix[2][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  //kombinacija 9
+  if (
+    matrix[2][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    (matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0) ||
+    (matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[2][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  //kombinacija 10
+  if (
+    matrix[0][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    (matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[0][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    (matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[0][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  // kombinacija 11
+  if (
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  // kombinacija 12
+  if (
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  // kombinacija 13
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 2 &&
+    matrix[1][0] === 2 &&
+    matrix[1][1] === 2 &&
+    matrix[2][0] === 2
+  ) {
+    if (matrix[1][2] === 1) matrix[1][2] = 0;
+  }
+  // kombinacija 14
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  // kombinacija 15
+  if (
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  // kombinacija 16
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  // kombinacija 17
+  if (
+    matrix[2][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[0][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[0][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  // kombinacija 18
+  if (
+    matrix[2][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  // kombinacija 19
+  if (
+    matrix[2][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][0] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  // kombinacija 20
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[0][2] === 0 &&
+      matrix[2][2] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  // kombinacija 21
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    (matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  // kombinacija 22
+  if (
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[2][0] === 1 &&
+    // matrix[2][1] === 1 &&
+    matrix[0][0] === 2 &&
+    matrix[0][1] === 2 &&
+    matrix[0][2] === 2 &&
+    matrix[1][1] === 2
+  ) {
+    if (matrix[2][1] === 1) matrix[2][1] = 0;
+  }
+  // kombinacija 23
+  if (
+    matrix[1][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    (matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[0][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  // kombinacija 24
+  if (
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    (matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  // kombinacija 25
+  if (
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  // kombinacija 26
+  if (
+    matrix[1][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    (matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    (matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  // kombinacija 27
+  if (
+    matrix[0][0] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+
+  if (
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  // kombinacija 28
+  if (
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][2] === 0) matrix[2][2] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[0][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][0] === 0) matrix[0][0] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  // kombinacija 29
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[0][0] === 2 &&
+    matrix[2][1] === 2 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  // kombinacija 30
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 2 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  // kombinacija 31
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  // kombinacija 32
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  // kombinacija 33
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  // kombinacija 34
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][2] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][2] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][1] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+
+  // kombinacija 35
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  // kombinacija 36
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[0][2] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][1] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][0] === 0 &&
+    matrix[2][1] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  // kombinacija 37
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  // kombinacija 37
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[0][1] === 0 &&
+    matrix[2][1] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][1] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[1][0] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][1] === 0 &&
+      matrix[2][1] === 0)
+  ) {
+    if (matrix[0][1] === 0) matrix[0][1] = 2;
+  }
+  //kombinacija 38
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][1] === 0) matrix[2][1] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][0] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[0][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[1][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  // kombinacija 39
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[2][0] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[2][0] === 0 &&
+      matrix[2][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[2][0] === 0)
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[1][2] === 1 &&
+    matrix[2][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[2][2] === 0
+  ) {
+    if (matrix[0][2] === 0) matrix[0][2] = 2;
+  }
+  // kombinacija 39
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][0] === 0 &&
+    matrix[1][2] === 0 &&
+    matrix[2][0] === 0
+  ) {
+    if (matrix[2][0] === 0) matrix[2][0] = 2;
+  }
+
+  if (
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[0][2] === 1 &&
+      matrix[1][0] === 0 &&
+      matrix[1][2] === 0) ||
+    (matrix[1][1] === 1 &&
+      matrix[0][1] === 1 &&
+      matrix[2][2] === 1 &&
+      matrix[1][2] === 1 &&
+      matrix[0][2] === 0 &&
+      matrix[1][0] === 0)
+  ) {
+    if (matrix[1][0] === 0) matrix[1][0] = 2;
+  }
+  if (
+    matrix[1][1] === 1 &&
+    matrix[0][1] === 1 &&
+    matrix[2][2] === 1 &&
+    matrix[1][0] === 1 &&
+    matrix[0][2] === 0 &&
+    matrix[1][2] === 0
+  ) {
+    if (matrix[1][2] === 0) matrix[1][2] = 2;
+  }
+  //Game over
+  // if (
+  //   matrix[0][0] !== 0 &&
+  //   matrix[0][1] !== 0 &&
+  //   matrix[0][2] !== 0 &&
+  //   matrix[1][0] !== 0 &&
+  //   matrix[1][1] !== 0 &&
+  //   matrix[1][2] !== 0 &&
+  //   matrix[2][0] !== 0 &&
+  //   matrix[2][1] !== 0 &&
+  //   matrix[2][2] !== 0
+  // ) {
+  //   text2.innerText = "GAME OVER";
+  // }
+  if (
+    (matrix[0][0] === 1 && matrix[0][1] === 1 && matrix[0][2] === 1) ||
+    (matrix[1][0] === 1 && matrix[1][1] === 1 && matrix[1][2] === 1) ||
+    (matrix[2][0] === 1 && matrix[2][1] === 1 && matrix[2][2] === 1) ||
+    (matrix[0][0] === 1 && matrix[1][0] === 1 && matrix[2][0] === 1) ||
+    (matrix[0][1] === 1 && matrix[1][1] === 1 && matrix[2][1] === 1) ||
+    (matrix[0][2] === 1 && matrix[1][2] === 1 && matrix[2][2] === 1) ||
+    (matrix[0][0] === 1 && matrix[1][1] === 1 && matrix[2][2] === 1) ||
+    (matrix[2][0] === 1 && matrix[1][1] === 1 && matrix[0][2] === 1)
+  ) {
+    text1.innerText = "YOU WON!!!";
+  }
+  if (
+    (matrix[0][0] === 2 && matrix[0][1] === 2 && matrix[0][2] === 2) ||
+    (matrix[1][0] === 2 && matrix[1][1] === 2 && matrix[1][2] === 2) ||
+    (matrix[2][0] === 2 && matrix[2][1] === 2 && matrix[2][2] === 2) ||
+    (matrix[0][0] === 2 && matrix[1][0] === 2 && matrix[2][0] === 2) ||
+    (matrix[0][1] === 2 && matrix[1][1] === 2 && matrix[2][1] === 2) ||
+    (matrix[0][2] === 2 && matrix[1][2] === 2 && matrix[2][2] === 2) ||
+    (matrix[0][0] === 2 && matrix[1][1] === 2 && matrix[2][2] === 2) ||
+    (matrix[2][0] === 2 && matrix[1][1] === 2 && matrix[0][2] === 2)
+  ) {
+    text1.innerText = "YOU LOST!!!";
+    end();
+  }
+  render();
+}
+render();
