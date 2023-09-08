@@ -64,7 +64,7 @@ function stop() {}
 
 function valueMatrix() {
   playerX = true;
-  //kombinacija 1
+  //combination 1
   if (
     matrix[0][0] === 1 ||
     matrix[0][2] === 1 ||
@@ -147,7 +147,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  //kombinacija 2
+  //combination 2
   if (
     matrix[0][0] === 1 &&
     matrix[0][2] === 1 &&
@@ -219,7 +219,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][0] === 0) matrix[2][0] = 2;
   }
-  //kombinacija 3
+  //combination 3
   if (
     matrix[0][0] === 1 &&
     matrix[0][1] === 1 &&
@@ -294,7 +294,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
-  //kombinacija 4
+  //combination 4
   if (
     matrix[0][0] === 1 &&
     matrix[2][0] === 1 &&
@@ -368,7 +368,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][2] === 0) matrix[2][2] = 2;
   }
-  //kombinacija 5
+  //combination 5
   if (
     matrix[0][0] === 1 &&
     matrix[2][2] === 1 &&
@@ -443,7 +443,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][0] === 0) matrix[1][0] = 2;
   }
-  // kombinacija 6
+  // combination 6
   if (
     matrix[2][2] === 1 &&
     matrix[1][2] === 1 &&
@@ -515,7 +515,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][0] === 0) matrix[1][0] = 2;
   }
-  // kombinacija 7
+  // combination 7
   if (
     matrix[2][2] === 1 &&
     matrix[0][2] === 1 &&
@@ -590,7 +590,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][0] === 0) matrix[0][0] = 2;
   }
-  //kombinacija 8
+  //combination 8
   if (
     matrix[2][2] === 1 &&
     matrix[2][1] === 1 &&
@@ -665,7 +665,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][1] === 0) matrix[0][1] = 2;
   }
-  //kombinacija 9
+  //combination 9
   if (
     matrix[2][2] === 1 &&
     matrix[2][0] === 1 &&
@@ -740,7 +740,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][0] === 0) matrix[0][0] = 2;
   }
-  //kombinacija 10
+  //combination 10
   if (
     matrix[0][2] === 1 &&
     matrix[2][0] === 1 &&
@@ -815,7 +815,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][0] === 0) matrix[1][0] = 2;
   }
-  // kombinacija 11
+  // combination 11
   if (
     matrix[0][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -890,7 +890,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  // kombinacija 12
+  // combination 12
   if (
     matrix[0][1] === 1 &&
     matrix[1][2] === 1 &&
@@ -965,7 +965,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
-  // kombinacija 13
+  // combination 13
   if (
     matrix[0][1] === 1 &&
     matrix[2][1] === 1 &&
@@ -1052,7 +1052,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 1) matrix[1][2] = 0;
   }
-  // kombinacija 14
+  // combination 14
   if (
     matrix[0][1] === 1 &&
     matrix[2][2] === 1 &&
@@ -1129,7 +1129,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
-  // kombinacija 15
+  // combination 15
   if (
     matrix[0][1] === 1 &&
     matrix[0][2] === 1 &&
@@ -1205,7 +1205,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
-  // kombinacija 16
+  // combination 16
   if (
     matrix[0][1] === 1 &&
     matrix[2][0] === 1 &&
@@ -1281,7 +1281,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][2] === 0) matrix[0][2] = 2;
   }
-  // kombinacija 17
+  // combination 17
   if (
     matrix[2][1] === 1 &&
     matrix[2][0] === 1 &&
@@ -1357,7 +1357,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][1] === 0) matrix[0][1] = 2;
   }
-  // kombinacija 18
+  // combination 18
   if (
     matrix[2][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -1421,7 +1421,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  // kombinacija 19
+  // combination 19
   if (
     matrix[2][1] === 1 &&
     matrix[1][2] === 1 &&
@@ -1497,7 +1497,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][0] === 0) matrix[1][0] = 2;
   }
-  // kombinacija 20
+  // combination 20
   if (
     matrix[2][1] === 1 &&
     matrix[0][0] === 1 &&
@@ -1555,7 +1555,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  // kombinacija 21
+  // combination 21
   if (
     matrix[2][1] === 1 &&
     matrix[0][2] === 1 &&
@@ -1625,7 +1625,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][1] === 0) matrix[0][1] = 2;
   }
-  // kombinacija 22
+  // combination 22
   if (
     matrix[1][0] === 1 &&
     matrix[1][2] === 1 &&
@@ -1689,7 +1689,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 1) matrix[2][1] = 0;
   }
-  // kombinacija 23
+  // combination 23
   if (
     matrix[1][0] === 1 &&
     matrix[2][0] === 1 &&
@@ -1749,7 +1749,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][1] === 0) matrix[0][1] = 2;
   }
-  // kombinacija 24
+  // combination 24
   if (
     matrix[1][0] === 1 &&
     matrix[0][2] === 1 &&
@@ -1807,7 +1807,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][0] === 0) matrix[2][0] = 2;
   }
-  // kombinacija 25
+  // combination 25
   if (
     matrix[1][0] === 1 &&
     matrix[2][2] === 1 &&
@@ -1871,7 +1871,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][0] === 0) matrix[0][0] = 2;
   }
-  // kombinacija 26
+  // combination 26
   if (
     matrix[1][2] === 1 &&
     matrix[0][2] === 1 &&
@@ -1947,7 +1947,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][0] === 0) matrix[1][0] = 2;
   }
-  // kombinacija 27
+  // combination 27
   if (
     matrix[0][0] === 1 &&
     matrix[1][2] === 1 &&
@@ -1989,7 +1989,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
-  // kombinacija 28
+  // combination 28
   if (
     matrix[1][2] === 1 &&
     matrix[2][0] === 1 &&
@@ -2040,7 +2040,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][2] === 0) matrix[0][2] = 2;
   }
-  // kombinacija 29
+  // combination 29
   if (
     matrix[1][1] === 1 &&
     matrix[2][0] === 1 &&
@@ -2118,7 +2118,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][0] === 0) matrix[1][0] = 2;
   }
-  // kombinacija 30
+  // combination 30
   if (
     matrix[1][1] === 1 &&
     matrix[0][2] === 1 &&
@@ -2196,7 +2196,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][1] === 0) matrix[0][1] = 2;
   }
-  // kombinacija 31
+  // combination 31
   if (
     matrix[1][1] === 1 &&
     matrix[2][2] === 1 &&
@@ -2272,7 +2272,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  // kombinacija 32
+  // combination 32
   if (
     matrix[1][1] === 1 &&
     matrix[2][1] === 1 &&
@@ -2348,7 +2348,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  // kombinacija 33
+  // combination 33
   if (
     matrix[1][1] === 1 &&
     matrix[1][2] === 1 &&
@@ -2425,7 +2425,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
-  // kombinacija 34
+  // combination 34
   if (
     matrix[1][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -2475,7 +2475,7 @@ function valueMatrix() {
     if (matrix[2][1] === 0) matrix[2][1] = 2;
   }
 
-  // kombinacija 35
+  // combination 35
   if (
     matrix[1][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -2514,7 +2514,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][0] === 0) matrix[2][0] = 2;
   }
-  // kombinacija 36
+  // combination 36
   if (
     matrix[1][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -2553,7 +2553,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][0] === 0) matrix[2][0] = 2;
   }
-  // kombinacija 37
+  // combination 37
   if (
     matrix[1][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -2592,7 +2592,7 @@ function valueMatrix() {
   ) {
     if (matrix[2][0] === 0) matrix[2][0] = 2;
   }
-  // kombinacija 37
+  // combination 37
   if (
     matrix[1][1] === 1 &&
     matrix[1][0] === 1 &&
@@ -2621,7 +2621,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][1] === 0) matrix[0][1] = 2;
   }
-  //kombinacija 38
+  //combination 38
   if (
     matrix[1][1] === 1 &&
     matrix[0][1] === 1 &&
@@ -2708,7 +2708,7 @@ function valueMatrix() {
   ) {
     if (matrix[1][2] === 0) matrix[1][2] = 2;
   }
-  // kombinacija 39
+  // combination 39
   if (
     matrix[1][1] === 1 &&
     matrix[0][1] === 1 &&
@@ -2747,7 +2747,7 @@ function valueMatrix() {
   ) {
     if (matrix[0][2] === 0) matrix[0][2] = 2;
   }
-  // kombinacija 39
+  // combination 39
   if (
     matrix[1][1] === 1 &&
     matrix[0][1] === 1 &&
