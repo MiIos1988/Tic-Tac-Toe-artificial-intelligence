@@ -1,7 +1,9 @@
+type HtmlElement = HTMLElement | null;
+
 let game = document.querySelector(".game");
-let text1 = document.getElementById("text1");
+let text1: HtmlElement = document.getElementById("text1");
 let text2 = document.getElementById("text2");
-let btn = document.getElementById("btn");
+let btn: HtmlElement = document.getElementById("btn");
 let playerX = true;
 let matrix = [
   [0, 0, 0],
@@ -9,7 +11,9 @@ let matrix = [
   [0, 0, 0],
 ];
 
-btn.addEventListener("click", () => {
+
+
+btn !== null && btn.addEventListener("click", () => {
   matrix[0][0] = 0;
   matrix[0][1] = 0;
   matrix[0][2] = 0;
@@ -21,14 +25,14 @@ btn.addEventListener("click", () => {
   matrix[2][2] = 0;
   playerX = true;
   render();
-  text1.innerText = "";
+  if(text1 !== null) text1.innerText = "";
 });
 
 function render() {
-  game.innerHTML = "";
+  if (game !== null) game.innerHTML = "";
   for (let i = 0; i < 3; i++) {
     let row = document.createElement("div");
-    game.appendChild(row);
+    if (game !== null) game.appendChild(row);
     for (let j = 0; j < 3; j++) {
       let field = document.createElement("div");
       field.classList.add("row");
@@ -50,7 +54,7 @@ function render() {
 function end() {
   playerX = false;
 }
-function valueEntries(i, j) {
+function valueEntries(i: number, j: number) {
   if (matrix[i][j] === 0) {
     matrix[i][j] = 1;
     console.log(matrix[i][j]);
@@ -2796,7 +2800,7 @@ function valueMatrix() {
     (matrix[0][0] === 1 && matrix[1][1] === 1 && matrix[2][2] === 1) ||
     (matrix[2][0] === 1 && matrix[1][1] === 1 && matrix[0][2] === 1)
   ) {
-    text1.innerText = "YOU WON!!!";
+    if (text1 !== null) text1.innerText = "YOU WON!!!";
   }
   if (
     (matrix[0][0] === 2 && matrix[0][1] === 2 && matrix[0][2] === 2) ||
@@ -2808,7 +2812,7 @@ function valueMatrix() {
     (matrix[0][0] === 2 && matrix[1][1] === 2 && matrix[2][2] === 2) ||
     (matrix[2][0] === 2 && matrix[1][1] === 2 && matrix[0][2] === 2)
   ) {
-    text1.innerText = "YOU LOST!!!";
+    if (text1 !== null) text1.innerText = "YOU LOST!!!";
     end();
   }
   render();
