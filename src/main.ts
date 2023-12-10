@@ -57,7 +57,6 @@ function end() {
 function valueEntries(i: number, j: number) {
   if (matrix[i][j] === 0) {
     matrix[i][j] = 1;
-    console.log(matrix[i][j]);
   }
   playerX = false;
   setTimeout(valueMatrix, 500);
