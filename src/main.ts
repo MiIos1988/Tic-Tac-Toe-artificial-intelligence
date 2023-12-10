@@ -2,8 +2,7 @@ type HtmlElement = HTMLElement | null;
 
 let game = document.querySelector(".game");
 let text1: HtmlElement = document.getElementById("text1");
-let text2 = document.getElementById("text2");
-let btn: HtmlElement = document.getElementById("btn");
+let restart: HtmlElement = document.getElementById("btn");
 let playerX = true;
 let matrix = [
   [0, 0, 0],
@@ -11,22 +10,17 @@ let matrix = [
   [0, 0, 0],
 ];
 
-
-
-btn !== null && btn.addEventListener("click", () => {
-  matrix[0][0] = 0;
-  matrix[0][1] = 0;
-  matrix[0][2] = 0;
-  matrix[1][0] = 0;
-  matrix[1][1] = 0;
-  matrix[1][2] = 0;
-  matrix[2][0] = 0;
-  matrix[2][1] = 0;
-  matrix[2][2] = 0;
-  playerX = true;
-  render();
-  if(text1 !== null) text1.innerText = "";
-});
+restart !== null &&
+  restart.addEventListener("click", () => {
+    matrix = [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ];
+    playerX = true;
+    render();
+    if (text1 !== null) text1.innerText = "";
+  });
 
 function render() {
   if (game !== null) game.innerHTML = "";
@@ -38,21 +32,14 @@ function render() {
       field.classList.add("row");
       row.appendChild(field);
       let text = "";
-      if (matrix[i][j] === 1) {
-        text = "X";
-      }
+      if (matrix[i][j] === 1) text = "X";
       if (matrix[i][j] === 2) text = "O";
       field.innerText = text;
       if (playerX === true) {
         field.addEventListener("click", () => valueEntries(i, j));
-      } else {
-        field.addEventListener("click", () => stop());
       }
     }
   }
-}
-function end() {
-  playerX = false;
 }
 function valueEntries(i: number, j: number) {
   if (matrix[i][j] === 0) {
@@ -63,8 +50,6 @@ function valueEntries(i: number, j: number) {
 
   render();
 }
-function stop() {}
-
 function valueMatrix() {
   playerX = true;
   //combination 1
@@ -2812,7 +2797,7 @@ function valueMatrix() {
     (matrix[2][0] === 2 && matrix[1][1] === 2 && matrix[0][2] === 2)
   ) {
     if (text1 !== null) text1.innerText = "YOU LOST!!!";
-    end();
+    playerX = false;
   }
   render();
 }
